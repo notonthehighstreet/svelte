@@ -26,8 +26,10 @@ Point a service at an actual API spec.
 
 You may pass in a URL pointing to a Swagger spec or the JSON directly:
 
-    irb(main)> service = Svelte::Service.create(url: "http://path/to/swagger/spec/resource.json", module_name: 'PetStore')
-    irb(main)> service = Svelte::Service.create(json: "{ <JSON here> }", module_name: 'PetStore')
+```ruby
+service = Svelte::Service.create(url: "http://path/to/swagger/spec/resource.json", module_name: 'PetStore')
+service = Svelte::Service.create(json: "{ <JSON here> }", module_name: 'PetStore')
+```
 
 This will build a dynamically generated client on top of `Svelte::Service::PetStore`.
 
@@ -93,7 +95,7 @@ Let's look at an example. Using the complete PetStore spec, we can find the foll
 ```
 
 The path contains two parts: `pet` and `findByStatus`. This will generate
-the following module hierarchy in the new module:
+the following hierarchy in the new module:
 
 ```ruby
 Svelte::Service::PetStore::Pet::FindByStatus
@@ -112,10 +114,19 @@ Svelte::Service::PetStore::Pet::FindByStatus.find_pets_by_status(
 
 Where `request_payload` is a `Hash` representing the parameters of the operation
 and `request_options`, defaulting to an empty `Hash`, will be a `Hash` of
-options to pass to the request. At this moment only a `timeout` key is
-supported, allowing you to set up a timeout value in seconds.
+options to pass to the request.
 
-The methods on the generated class will be named as follows:
+In our case, the parameters would look like this:
+
+```ruby
+request_parameters = {
+  status: ['available', 'pending']
+}
+```
+
+### Responses
+
+Svelte will return a [`Faraday::Request`](http://www.rubydoc.info/gems/faraday/0.9.1/Faraday/Response) object as a response to a call.
 
 ### Models
 
@@ -124,11 +135,11 @@ to programmatically create and validate requests.
 They also provide an `as_json` that will generate a valid json body for
  a given request.
 
-Consider this swagger model:
+Consider the definitions key of this Swagger model:
 
 ```json
 {
-  "models": {
+  "definitions": {
     "MoneyView": {
       "id": "MoneyView",
       "description": "",
@@ -170,10 +181,6 @@ view.valid? # true
 view.as_json # {:currencyCode=>"GBP", :amount=>40.0}
 ```
 
-### Responses
-
-Svelte will return a [`Faraday::Request`](http://www.rubydoc.info/gems/faraday/0.9.1/Faraday/Response) object as a response to a call.
-
 ### Options
 
 You can specify a timeout option on a per request basis. If the request times out a `Svelte::TimeoutError` exception
@@ -181,7 +188,7 @@ will be raised.
 
 ```ruby
 begin
-  Svelte::Service::Pets.list_get(request.as_json, { timeout: 10 })
+  Svelte::Service::PetStore::Pet::FindByStatus.find_pets_by_status(request.as_json, { timeout: 10 })
 rescue Svelte::TimeoutError => e
   handle_timeout_error(e)
 end
