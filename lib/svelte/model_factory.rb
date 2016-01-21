@@ -3,15 +3,11 @@ require 'svelte/model_factory/parameter'
 module Svelte
   # Bridging the gap between an application and any external service that
   # publishes its API as a Swagger JSON spec.
-  #
-  # @see https://github.com/notonthehighstreet/svelte Svelte gem which consumes
-  #   Swagger spec files and turns API endpoints into Ruby objects.
-  # This module is supposed to be extended not used directly.
+  # @note This module is supposed to be extended not used directly
   module ModelFactory
     # Creates typed Ruby objects from JSON definitions. These definitions are
     # found in the Swagger JSON spec as a top-level key, "definitions".
-    #
-    # @param [Hash] json: hash of a swagger models definition
+    # @param json [Hash] hash of a swagger models definition
     # @return [Hash] A hash of model names to models created
     def define_models(json)
       return unless json
@@ -62,8 +58,7 @@ module Svelte
 
     # Creates typed Ruby objects from JSON String definitions. These definitions
     # are found in the Swagger JSON spec as a top-level key, "models".
-    #
-    # @param [String] string: string of json for a swagger models definition
+    # @param string [String] string of json for a swagger models definition
     # @return [Hash] A hash of model names to models created
     def define_models_from_json_string(string)
       define_models(JSON.parse(string)) if string
@@ -71,19 +66,14 @@ module Svelte
 
     # Creates typed Ruby objects from JSON File definitions. These definitions
     # are found in the Swagger JSON spec as a top-level key, "models".
-    #
-    # @param [String] file: path to a json file for a swagger models definition
+    # @param file [String] path to a json file for a swagger models definition
     # @return [Hash] A hash of model names to models created
     def define_models_from_file(file)
       define_models_from_json_string(File.read(file)) if file
     end
 
-    ######
+    private
 
-    # Defines the initializer on the new model.
-    # Sets up the basic required properties and any nested models.
-    #
-    # @param model: chunk of JSON which represents a single model.
     def define_initialize_on(model:)
       model.send(:define_method, :initialize, lambda do
         (required_attributes - nested_models.keys).each do |required|
@@ -103,11 +93,6 @@ module Svelte
       end)
     end
 
-    # Defines a validate method on the new model.
-    # Checks all required parameters for their presence and
-    # recursively iterates through nested parameters.
-    #
-    # @param model: chunk of JSON which represents a single model.
     def define_validate_on(model:)
       model.send(:define_method, :validate, lambda do
         invalid_params = {}
@@ -121,10 +106,6 @@ module Svelte
       end)
     end
 
-    # Defines a valid? property on the entire model that checks that
-    # the validate method does not return any invalid params.
-    #
-    # @param model: chunk of JSON which represents a single model.
     def define_valid_on(model:)
       model.send(:define_method, :valid?, lambda do
         validate.empty?
@@ -137,9 +118,6 @@ module Svelte
       end)
     end
 
-    # Defines all the atrributes on the new model from the JSON spec.
-    #
-    # @param model: chunk of JSON which represents a single model.
     def define_attributes_on(model:)
       model.send(:define_method, :attributes, lambda do
         @attributes ||= json_for_model['properties'].keys

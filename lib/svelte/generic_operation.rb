@@ -6,10 +6,9 @@ module Svelte
     class << self
       # Make an HTTP request to a REST resource
       # @param verb [String] http verb to use, i.e. `'get'`
-      # @param path [Svelte::Path] Path object containing information about the
+      # @param path [Path] Path object containing information about the
       #   operation to be called
-      # @param base_path [String] base path of the REST endpoint
-      # @param host [String] host of the REST endpoint
+      # @param configuration [Configuration] Swagger API configuration
       # @param parameters [Hash] payload of the request, i.e. `{ petId: 1}`
       # @param options [Hash] request options, i.e. `{ timeout: 10 }`
       def call(verb:, path:, configuration:, parameters:, options:)
@@ -18,10 +17,10 @@ module Svelte
                       parameters: parameters)
         request_parameters = clean_parameters(path: path,
                                               parameters: parameters)
-        Svelte::RestClient.call(verb: verb,
-                                url: url,
-                                params: request_parameters,
-                                options: options)
+        RestClient.call(verb: verb,
+                        url: url,
+                        params: request_parameters,
+                        options: options)
       end
 
       private
@@ -42,7 +41,7 @@ module Svelte
       def named_parameters(path:, parameters:)
         path.parameter_elements.map do |parameter_element|
           unless parameters.key?(parameter_element)
-            raise Svelte::ParameterError,
+            raise ParameterError,
                  "Required parameter `#{parameter_element}` missing"
           end
           parameters[parameter_element]

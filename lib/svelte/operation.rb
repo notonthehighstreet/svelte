@@ -6,7 +6,7 @@ module Svelte
     # Creates a new Operation.
     # @param verb [String] operation verb i.e. `'get'`
     # @param properties [Hash] definition
-    # @param path [Svelte::Path] Path the operation belongs to
+    # @param path [Path] Path the operation belongs to
     def initialize(verb:, properties:, path:)
       @verb = verb
       @properties = properties

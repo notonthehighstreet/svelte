@@ -194,6 +194,23 @@ rescue Svelte::TimeoutError => e
 end
 ```
 
+## Limitations
+
+Svelte is still a work in progress gem and it lacks some features that will be
+implemented in the future. Feel free to request or comment on what you'd like
+to see supported. Here is a non exhaustive list of the pitfalls we've identified
+so far:
+
+* Supports `application/json` request and response types only
+* API calls return a raw [Faraday::Response] objects. We'll support returning
+  dynamically generated model responses based on the Swagger spec response
+  schema
+* Request parameter validation is only done for url based parameters.
+    It'd be possible to add validations to all parameters of the request.
+    In fact the `ModelFactory` already provides that functionality, but it
+    requires the client to call `valid?` on the requests to perform the
+    validation. This should happen automatically
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `bin/console` for an interactive prompt that will allow you to experiment.

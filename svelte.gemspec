@@ -6,7 +6,7 @@ require 'svelte/version'
 Gem::Specification.new do |spec|
   spec.name          = 'svelte'
   spec.version       = Svelte::VERSION
-  spec.authors       = ['Bernat Rafales', 'Alex Sunderland']
+  spec.authors       = ['notonthehighstreet.com']
   spec.email         = ['tech.contact@notonthehighstreet.com']
 
   spec.summary       = 'Dynamic Ruby API Client from Swagger JSON Spec'

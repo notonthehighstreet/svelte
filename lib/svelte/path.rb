@@ -13,7 +13,7 @@ module Svelte
     end
 
     # Path operations
-    # @return [Array<Svelte::Operation>] list of operations for the path
+    # @return [Array<Operation>] list of operations for the path
     def operations
       validate_operations
       @operations ||= @raw_operations.map do |operation, properties|

@@ -2,8 +2,12 @@ module Svelte
   module ModelFactory
     # Helper class to wrap around all parameters
     class Parameter
+
+      # Constant to represent an unset parameter
       UNSET = Class.new
 
+      # Override of the `inspect` method to return a string representation
+      # of the class
       def UNSET.inspect
         'unset'
       end

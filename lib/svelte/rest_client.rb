@@ -14,7 +14,7 @@ module Svelte
       # @param url [String] request url
       # @param params [Hash] parameters to send to the request
       # @param options [Hash] options
-      # @raise [Svelte::HTTPError] if an HTTP layer error occurs,
+      # @raise [HTTPError] if an HTTP layer error occurs,
       #   an exception will be raised
       #
       # @return [Faraday::Response] http response from the service
@@ -23,11 +23,11 @@ module Svelte
           request.options.timeout = options[:timeout] if options[:timeout]
         end
       rescue Faraday::TimeoutError => e
-        raise Svelte::HTTPError.new(parent: e)
+        raise HTTPError.new(parent: e)
       rescue Faraday::ResourceNotFound => e
-        raise Svelte::HTTPError.new(parent: e)
+        raise HTTPError.new(parent: e)
       rescue Faraday::ClientError => e
-        raise Svelte::HTTPError.new(parent: e)
+        raise HTTPError.new(parent: e)
       end
 
       private

@@ -6,7 +6,7 @@ module Svelte
   class HTTPError < StandardError
     attr_reader :parent
 
-    # Creates a new Svelte::HTTPError with a message and a parent error
+    # Creates a new HTTPError with a message and a parent error
     # @param message [String] exception message
     # @param parent the parent exception
     def initialize(message: nil, parent: nil)

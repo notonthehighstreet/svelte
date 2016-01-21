@@ -6,6 +6,8 @@ module Svelte
     # Creates a new SwaggerBuilder
     # @param raw_hash [Hash] Swagger API definition
     # @param module_name [String] name of the constant you want built
+    # @param options [Hash] Swagger API options. It will be used to build the
+    #   [Configuration]. Supports the `:host` value for now.
     def initialize(raw_hash:, module_name:, options:)
       @raw_hash = raw_hash
       @module_name = module_name
@@ -13,7 +15,7 @@ module Svelte
       validate
     end
 
-    # Dynamically creates a new resource on top of `Svelte::Service` wit the
+    # Dynamically creates a new resource on top of `Svelte::Service` with the
     # name `module_name`, based on the Swagger API description provided
     # in `raw_hash`
     # @return [Module] the module built
@@ -27,19 +29,22 @@ module Svelte
                                  configuration: configuration)
         end
       end
-      Svelte::Service.const_set(module_name, resource)
+      Service.const_set(module_name, resource)
     end
 
+    # @return [Array<Path>] Paths of the Swagger spec
     def paths
       raw_hash['paths'].map do |path, operations|
         Path.new(path: path, operations: operations)
       end
     end
 
+    # @return [String] base path of the Swagger spec
     def base_path
       raw_hash['basePath']
     end
 
+    # @return [String] host of the Swagger spec
     def host
       raw_hash['host']
     end

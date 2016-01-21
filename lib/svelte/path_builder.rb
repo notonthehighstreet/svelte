@@ -10,7 +10,7 @@ module Svelte
       # Example:
       # If the `path` is `/store/inventory` and the `module_constant` is
       # `Test`, the resulting module hierarchy will be `Test::Store::Inventory`
-      # @param path [Svelte::Path] path to build
+      # @param path [Path] path to build
       # @param module_constant [Module] operation to build
       def build(path:, module_constant:)
         create_module_hierarchy(base_module: module_constant,
