@@ -35,7 +35,10 @@ module Svelte
         protocol = configuration.protocol
         host = configuration.host
         base_path = configuration.base_path
-        "#{protocol}://#{host}#{base_path}#{url_path}"
+        if base_path == '/'
+          base_path = ''
+        end
+        "#{protocol}://#{host}#{base_path}/#{url_path}"
       end
 
       def named_parameters(path:, parameters:)

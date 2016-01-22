@@ -31,7 +31,7 @@ describe Svelte::GenericOperation do
         }
       end
       let(:pet_id) { 1 }
-      let(:url) { "#{protocol}://#{host}#{base_path}pet/#{pet_id}" }
+      let(:url) { "http://localhost/pet/#{pet_id}" }
 
       it 'calls Svelte::RestClient with the correct parameters' do
         expect(Svelte::RestClient).to receive(:call).with(verb: verb,
@@ -56,7 +56,7 @@ describe Svelte::GenericOperation do
         }
       end
       let(:pet_id) { 1 }
-      let(:url) { "#{protocol}://#{host}#{base_path}pet" }
+      let(:url) { 'http://localhost/pet' }
 
       it 'calls Svelte::RestClient with the correct parameters' do
         expect(Svelte::RestClient).to receive(:call).with(verb: verb,
