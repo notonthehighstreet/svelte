@@ -141,5 +141,15 @@ describe Svelte do
                           'Operation is missing mandatory `operationId` field')
       end
     end
+
+    context 'with a version 1.2 JSON spec' do
+      let(:json) { File.read('spec/fixtures/petstore_1.2.json') }
+
+      it 'raises a VersionError exception' do
+        expect { described_class.create(json: json, module_name: module_name) }
+          .to raise_error(Svelte::VersionError,
+                          'Invalid Swagger version spec supplied. Svelte supports Swagger v2 only')
+      end
+    end
   end
 end

@@ -61,9 +61,16 @@ module Svelte
     end
 
     def validate
+      validate_version
       validate_paths
       validate_host
       validate_base_path
+    end
+
+    def validate_version
+      if raw_hash['swagger'] != '2.0'
+        raise VersionError
+      end
     end
 
     def validate_paths
