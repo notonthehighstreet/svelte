@@ -148,7 +148,7 @@ describe Svelte do
       it 'raises a VersionError exception' do
         expect { described_class.create(json: json, module_name: module_name) }
           .to raise_error(Svelte::VersionError,
-                          'Invalid Swagger version spec supplied. Svelte supports Swagger v2 only')
+                          '"swagger" field is empty. Svelte only supports Swagger v2.0.')
       end
     end
   end
