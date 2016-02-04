@@ -4,6 +4,9 @@ Svelte is a Swagger-to-Ruby object mapper.
 
 It reads a Swagger specification file in JSON, and automatically generates Resource Classes with static methods to represent the various HTTP endpoints.
 
+[![Build Status](https://secure.travis-ci.org/savonrb/savon.png?branch=master)](http://travis-ci.org/savonrb/savon)
+[![Code Climate](https://codeclimate.com/github/notonthehighstreet/svelte/badges/gpa.svg)](https://codeclimate.com/github/notonthehighstreet/svelte)
+
 ## Installation
 
 Add this line to your application's Gemfile:
