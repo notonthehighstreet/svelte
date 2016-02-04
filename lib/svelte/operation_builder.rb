@@ -27,7 +27,7 @@ module Svelte
       #   request
       # @note All keys will be transformed from `Symbol` to `String`
       def request_parameters(full_parameters:)
-        return {} if full_parameters.empty?
+        return {} if full_parameters.compact.empty?
         full_parameters.first.inject({}) do |memo, (k, v)|
           memo.merge!(k.to_s => v)
         end
