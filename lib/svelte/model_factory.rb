@@ -48,7 +48,8 @@ module Svelte
 
         model.instance_variable_set('@json_for_model', parameters.freeze)
 
-        models[model_name] = model
+        constant_name_for_model = StringManipulator.constant_name_for(model_name)
+        models[constant_name_for_model] = model
       end
 
       models.each do |model_name, model|
@@ -85,6 +86,7 @@ module Svelte
           nested_class_name = public_send("#{nested_model_name}=",
                                           nested_model_info['$ref']
                                             .split('/').last)
+          nested_class_name = StringManipulator.constant_name_for(nested_class_name)
           nested_class_name = self.class.name.gsub(/::[^:]*\z/, '::') +
                               nested_class_name
           public_send("#{nested_model_name}=",

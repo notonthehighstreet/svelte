@@ -32,6 +32,16 @@ describe Svelte::StringManipulator do
     it 'handles numbers at the beginning and somewhere else' do
       expect(described_class.constant_name_for('1v2')).to eq('Onev2')
     end
+
+    it 'handles names with spaces' do
+      expect(described_class.constant_name_for('A request to initiate Something awesome'))
+        .to eq('ARequestToInitiateSomethingAwesome')
+    end
+
+    it 'handles names with non alfanumeric characters' do
+      expect(described_class.constant_name_for('A request. With some ? stuff'))
+        .to eq('ARequestWithSomeStuff')
+    end
   end
 
   describe '#method_name_for' do
@@ -75,6 +85,16 @@ describe Svelte::StringManipulator do
         .to eq('code_that_is_3ds')
       expect(described_class.method_name_for('3DSCode'))
         .to eq('three_ds_code')
+    end
+
+    it 'handles names with spaces' do
+      expect(described_class.method_name_for('A request to initiate Something awesome'))
+        .to eq('a_request_to_initiate_something_awesome')
+    end
+
+    it 'handles names with non alfanumeric characters' do
+      expect(described_class.method_name_for('A request. With some ? stuff'))
+        .to eq('a_request_with_some_stuff')
     end
   end
 end
