@@ -51,12 +51,12 @@ module Svelte
 
     private
 
-    def build_configuration(_options)
+    def build_configuration(extra_options)
       options = {
-          host: host,
-          base_path: base_path,
-          protocol: _options[:protocol]
-      }
+        host: host,
+        base_path: base_path,
+      }.merge(extra_options)
+
       Configuration.new(options: options)
     end
 

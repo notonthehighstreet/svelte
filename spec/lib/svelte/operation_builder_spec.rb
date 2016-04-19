@@ -20,6 +20,7 @@ describe Svelte::OperationBuilder do
     double(:configuration,
            host: host,
            base_path: base_path,
+           middleware_stack: [],
            protocol: protocol)
   end
 
@@ -46,7 +47,7 @@ describe Svelte::OperationBuilder do
         path: path,
         configuration: configuration,
         parameters: { 'request_parameter' => request_parameter },
-        options: {})
+        options: {middleware_stack: []})
 
       module_constant.public_send(method_name, parameters)
     end
@@ -84,7 +85,8 @@ describe Svelte::OperationBuilder do
         path: path,
         configuration: configuration,
         parameters: {},
-        options: {})
+        options: {middleware_stack: []}
+      )
 
       module_constant.public_send(method_name)
     end

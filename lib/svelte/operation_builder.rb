@@ -15,7 +15,7 @@ module Svelte
             path: operation.path,
             configuration: configuration,
             parameters: builder.request_parameters(full_parameters: parameters),
-            options: builder.options(full_parameters: parameters))
+            options: builder.options(full_parameters: parameters, middleware_stack: configuration.middleware_stack))
         end
       end
 
@@ -39,8 +39,10 @@ module Svelte
       #   method call
       # @return [Hash] Hash with all the options to be sent as part of the
       #   request
-      def options(full_parameters:)
-        full_parameters[1] || {}
+      def options(full_parameters:, middleware_stack:)
+        options = full_parameters[1] || {}
+        options[:middleware_stack] ||= middleware_stack
+        options
       end
     end
   end
