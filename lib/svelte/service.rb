@@ -16,7 +16,7 @@ module Svelte
       #   `Svelte::Service::Comments`
       # @note Either `url` or `json` need to be provided. `url` will take
       #   precedence over `json`
-      def create(url:, json:, module_name:, options:)
+      def create(url: nil, json: nil, module_name:, options: {})
         json = get_json(url: url) if url
         SwaggerBuilder.new(raw_hash: JSON.parse(json.to_s),
                            module_name: module_name,
