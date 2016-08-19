@@ -4,8 +4,8 @@ describe Svelte::GenericOperation do
   let(:verb) { :get }
   let(:path) do
     double(:path,
-           parameter_elements: parameter_elements,
-           non_parameter_elements: non_parameter_elements)
+           path: url_path,
+           parameter_elements: parameter_elements)
   end
   let(:base_path) { '/' }
   let(:host) { 'localhost' }
@@ -20,35 +20,63 @@ describe Svelte::GenericOperation do
   end
 
   context '#call' do
-    context 'with url parameters' do
-      let(:parameter_elements) { ['petId'] }
-      let(:non_parameter_elements) { ['pet'] }
-      let(:params) { {} }
+    context 'with url parameter' do
+      context 'at the end of the url' do
+        let(:url_path) { '/pet/{petId}' }
+        let(:parameter_elements) { ['petId'] }
+        let(:params) { {} }
 
-      let(:parameters) do
-        {
-          'petId' => pet_id
-        }
+        let(:parameters) do
+          {
+            'petId' => pet_id
+          }
+        end
+        let(:pet_id) { 1 }
+        let(:url) { "http://localhost/pet/#{pet_id}" }
+
+        it 'calls Svelte::RestClient with the correct parameters' do
+          expect(Svelte::RestClient).to receive(:call).with(verb: verb,
+                                                            url: url,
+                                                            params: params,
+                                                            options: options)
+          described_class.call(verb: verb,
+                               path: path,
+                               configuration: configuration,
+                               parameters: parameters,
+                               options: options)
+        end
       end
-      let(:pet_id) { 1 }
-      let(:url) { "http://localhost/pet/#{pet_id}" }
 
-      it 'calls Svelte::RestClient with the correct parameters' do
-        expect(Svelte::RestClient).to receive(:call).with(verb: verb,
-                                                          url: url,
-                                                          params: params,
-                                                          options: options)
-        described_class.call(verb: verb,
-                             path: path,
-                             configuration: configuration,
-                             parameters: parameters,
-                             options: options)
+      context 'not at the end of the url' do
+        let(:url_path) { '/pet/{petId}/hobbies' }
+        let(:parameter_elements) { ['petId'] }
+        let(:params) { {} }
+
+        let(:parameters) do
+          {
+              'petId' => pet_id
+          }
+        end
+        let(:pet_id) { 1 }
+        let(:url) { "http://localhost/pet/#{pet_id}/hobbies" }
+
+        it 'calls Svelte::RestClient with the correct parameters' do
+          expect(Svelte::RestClient).to receive(:call).with(verb: verb,
+                                                            url: url,
+                                                            params: params,
+                                                            options: options)
+          described_class.call(verb: verb,
+                               path: path,
+                               configuration: configuration,
+                               parameters: parameters,
+                               options: options)
+        end
       end
     end
 
     context 'without url parameters' do
+      let(:url_path) { '/pet' }
       let(:parameter_elements) { [] }
-      let(:non_parameter_elements) { ['pet'] }
       let(:params) { parameters }
       let(:parameters) do
         {
@@ -72,8 +100,8 @@ describe Svelte::GenericOperation do
     end
 
     context 'with missing url parameters' do
+      let(:url_path) { '/pet/{petId}' }
       let(:parameter_elements) { ['petId'] }
-      let(:non_parameter_elements) { ['pet'] }
 
       it 'raises a Svelte::ParameterError exception' do
         expect do
