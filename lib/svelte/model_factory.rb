@@ -14,38 +14,8 @@ module Svelte
       models = {}
       model_definitions = json['definitions']
       model_definitions.each do |model_name, parameters|
-        attributes = parameters['properties'].keys
-        model = Class.new do
-          attr_reader(*attributes.map(&:to_sym))
-
-          parameters['properties'].each do |attribute, options|
-            define_method("#{attribute}=", lambda do |value|
-              if public_send(attribute).nil? || !public_send(attribute).present?
-                permitted_values = options.fetch('enum', [])
-                required = parameters.fetch('required', []).include?(attribute)
-                instance_variable_set(
-                  "@#{attribute}",
-                  Parameter.new(options['type'],
-                                permitted_values: permitted_values,
-                                required: required)
-                )
-              end
-
-              instance_variable_get("@#{attribute}").value = value
-            end)
-          end
-        end
-
-        define_initialize_on(model: model)
-        define_attributes_on(model: model)
-        define_required_attributes_on(model: model)
-        define_json_for_model_on(model: model)
-        define_nested_models_on(model: model)
-        define_as_json_on(model: model)
-        define_to_json_on(model: model)
-        define_validate_on(model: model)
-        define_valid_on(model: model)
-
+        model = create_model(parameters: parameters)
+        define_methods_on(model: model)
         model.instance_variable_set('@json_for_model', parameters.freeze)
 
         constant_name_for_model = StringManipulator.constant_name_for(model_name)
@@ -74,6 +44,42 @@ module Svelte
     end
 
     private
+
+    def define_methods_on(model:)
+      define_initialize_on(model: model)
+      define_attributes_on(model: model)
+      define_required_attributes_on(model: model)
+      define_json_for_model_on(model: model)
+      define_nested_models_on(model: model)
+      define_as_json_on(model: model)
+      define_to_json_on(model: model)
+      define_validate_on(model: model)
+      define_valid_on(model: model)
+    end
+
+    def create_model(parameters:)
+      attributes = parameters['properties'].keys
+      Class.new do
+        attr_reader(*attributes.map(&:to_sym))
+
+        parameters['properties'].each do |attribute, options|
+          define_method("#{attribute}=", lambda do |value|
+            if public_send(attribute).nil? || !public_send(attribute).present?
+              permitted_values = options.fetch('enum', [])
+              required = parameters.fetch('required', []).include?(attribute)
+              instance_variable_set(
+                "@#{attribute}",
+                Parameter.new(options['type'],
+                              permitted_values: permitted_values,
+                              required: required)
+              )
+            end
+
+            instance_variable_get("@#{attribute}").value = value
+          end)
+        end
+      end
+    end
 
     def define_initialize_on(model:)
       model.send(:define_method, :initialize, lambda do
