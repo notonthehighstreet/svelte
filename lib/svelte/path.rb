@@ -1,7 +1,7 @@
 module Svelte
   # Describes a Swagger API Path
   class Path
-    attr_reader :non_parameter_elements, :parameter_elements
+    attr_reader :path, :non_parameter_elements, :parameter_elements
 
     # Creates a new Path.
     # @param path [String] path i.e. `'/store/inventory'`

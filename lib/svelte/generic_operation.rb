@@ -26,29 +26,26 @@ module Svelte
       private
 
       def url_for(configuration:, path:, parameters:)
-        url_path =
-          [
-            path.non_parameter_elements,
-            named_parameters(path: path, parameters: parameters)
-          ].flatten.join('/')
-
+        url_path = url_path(path: path, parameters: parameters)
         protocol = configuration.protocol
         host = configuration.host
         base_path = configuration.base_path
         if base_path == '/'
           base_path = ''
         end
-        "#{protocol}://#{host}#{base_path}/#{url_path}"
+        "#{protocol}://#{host}#{base_path}#{url_path}"
       end
 
-      def named_parameters(path:, parameters:)
-        path.parameter_elements.map do |parameter_element|
-          unless parameters.key?(parameter_element)
-            raise ParameterError,
-                 "Required parameter `#{parameter_element}` missing"
+      def url_path(path:, parameters:)
+        url_path = path.path.dup
+        path.parameter_elements.each do |parameter_element|
+          if parameters.key?(parameter_element)
+            url_path.sub!("{#{parameter_element}}", parameters[parameter_element].to_s)
+          else
+            raise ParameterError, "Required parameter `#{parameter_element}` missing"
           end
-          parameters[parameter_element]
         end
+        url_path
       end
 
       def clean_parameters(path:, parameters:)
