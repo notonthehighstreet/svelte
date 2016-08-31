@@ -26,7 +26,7 @@ module Svelte
             end
             required_nested_models = nested_models.keys & required_attributes
             nested_models.each do |nested_model_name, nested_model_info|
-              return unless required_nested_models.include?(nested_model_name)
+              break unless required_nested_models.include?(nested_model_name)
               nested_class_name = public_send("#{nested_model_name}=",
                                               nested_model_info['$ref']
                                                 .split('/').last)
@@ -104,7 +104,7 @@ module Svelte
         def define_nested_models_on(model:)
           model.send(:define_method, :nested_models, lambda do
             json_for_model['properties']
-              .select { |_property, sub_properties| sub_properties.key?('$ref') }
+            .select { |_property, sub_properties| sub_properties.key?('$ref') }
           end)
         end
 
