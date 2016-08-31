@@ -34,6 +34,7 @@ module Svelte
 
       def connection
         @@connection ||= Faraday.new(ssl: { verify: true }) do |faraday|
+          faraday.use :http_cache, store: Rails.cache, logger: Rails.logger
           faraday.request :json
           faraday.response :json, content_type: /\bjson$/
           faraday.adapter :typhoeus
