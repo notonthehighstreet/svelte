@@ -5,6 +5,7 @@ SimpleCov.start
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 
 require 'svelte'
+require 'byebug'
 require 'json'
 require 'webmock/rspec'
 

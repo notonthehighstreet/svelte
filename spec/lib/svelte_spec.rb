@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Svelte do
-  describe '#create' do
+  describe '.create' do
     let(:json) { File.read('spec/fixtures/petstore.json') }
     let(:module_name) { 'PetStore' }
     let(:options) do
@@ -70,6 +70,40 @@ describe Svelte do
       end
 
       include_examples 'builds all the things'
+    end
+
+    context 'with some middleware_stack' do
+      let(:json) { File.read('spec/fixtures/petstore.json') }
+
+      before do
+        require "faraday-http-cache"
+        stub_request(:get, "http://petstore.swagger.io/v2/user/login").
+          with(:headers => {'User-Agent'=>'Faraday v0.9.2'}).
+          to_return(:status => 200, :body => "", :headers => {})
+      end
+
+      let(:options){ {middleware_stack: [[Faraday::HttpCache, {}]]}}
+      let(:url) { 'http://www.example.com/petstore.json' }
+
+      context "building all the things" do
+        before do
+          described_class.create(json: json, module_name: module_name, options: options)
+        end
+        include_examples 'builds all the things'
+      end
+
+      it do
+        expect(Svelte::Configuration).to receive(:new) do |args|
+          expect(args[:options][:middleware_stack]).to eq [[Faraday::HttpCache, {}]]
+        end.and_call_original
+
+        expect_any_instance_of(Faraday::Connection).to receive(:use) do |args|
+          expect(args).to eq [[Faraday::HttpCache, {}]]
+        end.and_call_original
+
+        klass = described_class.create(json: json, module_name: module_name, options: options)
+        klass::User::Login.login_user
+      end
     end
 
     context 'with an online json' do
@@ -150,6 +184,28 @@ describe Svelte do
           .to raise_error(Svelte::VersionError,
                           'Invalid Swagger version spec supplied. Svelte supports Swagger v2 only')
       end
+    end
+  end
+
+  describe ".check_args" do
+    it "checks for a URL or JSON argument" do
+      expect(->{Svelte.check_args!(url: nil, json: nil)}).to raise_error(ArgumentError, "Must provide a URL or JSON argument")
+    end
+
+    it "checks for a valid URL" do
+      expect(->{Svelte.check_args!(url: "invalid url", json: nil)}).to raise_error(URI::InvalidURIError)
+    end
+
+    it "allows for a valid URL" do
+      expect(->{Svelte.check_args!(url: "https://some-valid-url.example.com", json: nil)}).not_to raise_error
+    end
+
+    it "checks for valid JSON" do
+      expect(->{Svelte.check_args!(url: nil, json: "not valid json")}).to raise_error(JSON::ParserError)
+    end
+
+    it "allows valid JSON" do
+      expect(->{Svelte.check_args!(json: "{}", url: nil)}).not_to raise_error
     end
   end
 end

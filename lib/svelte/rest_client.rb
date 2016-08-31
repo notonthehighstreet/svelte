@@ -19,25 +19,41 @@ module Svelte
       #
       # @return [Faraday::Response] http response from the service
       def call(verb:, url:, params: {}, options: {})
+        middleware_stack = options[:middleware_stack]
+        connection = connection_with(middleware_stack: middleware_stack)
+
         connection.send verb, url, params do |request|
           request.options.timeout = options[:timeout] if options[:timeout]
         end
-      rescue Faraday::TimeoutError => e
-        raise HTTPError.new(parent: e)
-      rescue Faraday::ResourceNotFound => e
-        raise HTTPError.new(parent: e)
-      rescue Faraday::ClientError => e
+      rescue *rescuable => e
         raise HTTPError.new(parent: e)
       end
 
       private
 
-      def connection
-        @@connection ||= Faraday.new(ssl: { verify: true }) do |faraday|
+      def rescuable
+        [Faraday::TimeoutError, Faraday::ResourceNotFound, Faraday::ClientError]
+      end
+
+      def connection_with(middleware_stack:)
+        connections[middleware_stack] ||= new_connection(middleware_stack)
+      end
+
+      def new_connection(middleware_stack)
+        Faraday.new(ssl: { verify: true }) do |faraday|
           faraday.request :json
+
+          Array(middleware_stack).each do |middleware, options|
+            faraday.use middleware, options
+          end
+
           faraday.response :json, content_type: /\bjson$/
           faraday.adapter :typhoeus
         end
+      end
+
+      def connections
+        @connections ||= {}
       end
     end
   end

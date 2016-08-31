@@ -25,13 +25,23 @@ require 'svelte/generic_operation'
 #   Svelte::Service::Comments::Api::Comments.create_comment(contents: 'nice post!')
 #   Svelte::Service::Comments::Api::Comments.delete_comment_by_id(id: 10)
 module Svelte
-  # @param url [String] url pointing to a Swagger spec
-  # @param json [String] the entire Swagger spec as a String
-  # @param module_name [String] constant name where you want Svelte to build
-  #   the new functionality on top of
-  # @note Either `url` or `json` need to be provided. `url` will take
-  #   precedence over `json`
-  def self.create(url: nil, json: nil, module_name:, options: {})
-    Service.create(url: url, json: json, module_name: module_name, options: options)
+  class<< self
+    # @param url [String] url pointing to a Swagger spec
+    # @param json [String] the entire Swagger spec as a String
+    # @param module_name [String] constant name where you want Svelte to build
+    #   the new functionality on top of
+    # @note Either `url` or `json` need to be provided. `url` will take
+    #   precedence over `json`
+    def create(url: nil, json: nil, module_name:, options: {})
+      check_args!(url: url, json: json)
+      
+      Service.create(url: url, json: json, module_name: module_name, options: options)
+    end
+
+    def check_args!(url:, json:)
+      raise ArgumentError, "Must provide a URL or JSON argument" unless url || json
+      URI.parse url if url
+      JSON.parse json if json
+    end
   end
 end
