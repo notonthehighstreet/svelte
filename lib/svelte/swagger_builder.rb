@@ -68,8 +68,9 @@ module Svelte
     end
 
     def validate_version
-      if raw_hash['swagger'] != '2.0'
-        raise VersionError
+      swagger_version = raw_hash['swagger']
+      if swagger_version != '2.0'
+        raise VersionError.new(swagger_version)
       end
     end
 
