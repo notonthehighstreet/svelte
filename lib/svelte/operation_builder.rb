@@ -12,7 +12,7 @@ module Svelte
         module_constant.define_singleton_method(method_name) do |*parameters|
           request_parameters = builder.request_parameters(full_parameters: parameters)
           headers = builder.strip_headers!(
-            operation_parameters: operation.properties.parameters,
+            operation_parameters: operation.properties[:parameters],
             request_parameters: request_parameters)
 
           GenericOperation.call(
@@ -61,7 +61,6 @@ module Svelte
 
         headers = request_parameters.select { |key, val| header_names.include?(key)}
         request_parameters.reject! { |key, val| header_names.include?(key) }
-
         headers.empty? ? nil : headers
       end
     end
