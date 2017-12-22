@@ -28,7 +28,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec', '~> 3.4'
   spec.add_development_dependency 'simplecov', '~> 0.11'
   spec.add_development_dependency 'webmock', '~> 1.22'
-  spec.add_development_dependency 'yard', '~> 0.8'
-  spec.add_development_dependency 'rubocop', '~> 0.36'
+  spec.add_development_dependency 'yard'
+  spec.add_development_dependency 'rubocop'
   spec.add_development_dependency 'codeclimate-test-reporter'
 end
