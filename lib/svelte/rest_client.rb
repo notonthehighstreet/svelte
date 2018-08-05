@@ -21,6 +21,7 @@ module Svelte
       def call(verb:, url:, params: {}, options: {})
         connection.send verb, url, params do |request|
           request.options.timeout = options[:timeout] if options[:timeout]
+          options[:headers].each { |key, value| request.headers[key] = value } if options[:headers]
         end
       rescue Faraday::TimeoutError => e
         raise HTTPError.new(parent: e)
