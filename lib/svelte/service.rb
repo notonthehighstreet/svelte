@@ -24,6 +24,7 @@ module Svelte
       def create(url: nil, json: nil, module_name:, options: {})
         options_with_auth = configure_auth_options(options: options)
         json = get_json(url: url, options: options_with_auth) if url
+
         SwaggerBuilder.new(raw_hash: JSON.parse(json.to_s),
                            module_name: module_name,
                            options: options_with_auth).make_resource
@@ -50,7 +51,12 @@ module Svelte
           token = auth.delete(:token)
           
           if basic
-            options[:headers]["Authorization"] = "Basic #{Base64.encode64([basic[:username], basic[:password]].join(':'))}"
+            token = Base64.encode64([
+              basic[:username], 
+              basic[:password]
+            ].join(':')).chomp
+            
+            options[:headers]["Authorization"] = "Basic #{token}"
           elsif token
             options[:headers]["Authorization"] = token
           end

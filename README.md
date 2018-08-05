@@ -184,7 +184,41 @@ view.valid? # true
 view.as_json # {:currencyCode=>"GBP", :amount=>40.0}
 ```
 
-### Options
+### Service Options
+
+When creating a client from the API spec, you can pass an `options` hash that will determine how the HTTP client interacts with your service.
+
+```ruby
+Svelte::Service.create(
+  url: "http://path/to/swagger/spec/resource.json",
+  module_name: 'PetStore', 
+  options: {
+    host: 'somehost.com',
+    base_path: '/api/v1',
+    protocol: 'https',
+    auth: {
+      basic: {
+        username: "user",
+        password: "pass"
+      }
+    },
+    headers: {
+      runas: 'otheruser'
+    }
+  })
+```
+
+The available options are:
+- `host` : overrides the `host` value found in the Swagger API spec, used when making API requests
+- `base_path` : overrides the `basePath` value found in the Swagger API spec, used when making API requests
+- `protocol` : overrides the network protocol used (default value is "http" when not present)
+- `auth` : sets optional authorization headers.  Possible values:
+  - `{ basic: { username: "value", password: "value" } }` : sets basic authentication credentials
+  - `{ token: "Bearer 12345" }` : sets a generic Authorization header (in this case a Bearer token `12345`)
+- `headers` : a collection of arbitrary key/value pairs converted to HTTP request headers included with each outgoing request
+
+
+### Request Options
 
 You can specify a timeout option on a per request basis. If the request times out a `Svelte::TimeoutError` exception
 will be raised.

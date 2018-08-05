@@ -7,7 +7,7 @@ module Svelte
     # @param raw_hash [Hash] Swagger API definition
     # @param module_name [String] name of the constant you want built
     # @param options [Hash] Swagger API options. It will be used to build the
-    #   [Configuration]. Supports the `:host` value for now.
+    #   [Configuration]. Supported values: ":host", ":base_path", ":protocol", ":headers"
     def initialize(raw_hash:, module_name:, options:)
       @raw_hash = raw_hash
       @module_name = module_name
@@ -53,9 +53,10 @@ module Svelte
 
     def build_configuration(_options)
       options = {
-          host: host,
-          base_path: base_path,
-          protocol: _options[:protocol]
+          host: _options[:host] || host,
+          base_path: _options[:base_path] || base_path,
+          protocol: _options[:protocol],
+          headers: _options[:headers] || {}
       }
       Configuration.new(options: options)
     end
