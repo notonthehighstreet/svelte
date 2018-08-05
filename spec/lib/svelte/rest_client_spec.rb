@@ -19,7 +19,7 @@ describe Svelte::RestClient do
 
     described_class.call(verb: verb, url: test_url, options: { 
       headers: { 
-        'Test': 'value', 
+        'Test' => 'value', 
         'Other' => 'value2' 
       } 
     })
