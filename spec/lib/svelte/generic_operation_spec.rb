@@ -38,7 +38,8 @@ describe Svelte::GenericOperation do
           expect(Svelte::RestClient).to receive(:call).with(verb: verb,
                                                             url: url,
                                                             params: params,
-                                                            options: options)
+                                                            options: options,
+                                                            headers: nil)
           described_class.call(verb: verb,
                                path: path,
                                configuration: configuration,
@@ -64,7 +65,8 @@ describe Svelte::GenericOperation do
           expect(Svelte::RestClient).to receive(:call).with(verb: verb,
                                                             url: url,
                                                             params: params,
-                                                            options: options)
+                                                            options: options,
+                                                            headers: nil)
           described_class.call(verb: verb,
                                path: path,
                                configuration: configuration,
@@ -90,7 +92,8 @@ describe Svelte::GenericOperation do
         expect(Svelte::RestClient).to receive(:call).with(verb: verb,
                                                           url: url,
                                                           params: params,
-                                                          options: options)
+                                                          options: options,
+                                                          headers: nil)
         described_class.call(verb: verb,
                              path: path,
                              configuration: configuration,
@@ -109,11 +112,39 @@ describe Svelte::GenericOperation do
                                path: path,
                                configuration: configuration,
                                parameters: parameters,
-                               options: options)
+                               options: options,
+                               headers: nil)
         end
           .to raise_error(Svelte::ParameterError,
                           'Required parameter `petId` missing')
       end
+    end
+  end
+
+  context 'with headers' do
+    let(:headers) { {'authorization' => 'foo'} }
+    let(:url) { 'http://localhost/pet' }
+    let(:parameter_elements) { [] }
+    let(:params) { parameters }
+    let(:parameters) do
+      {
+        'foo' => 'bar'
+      }
+    end
+    let(:url_path) { '/pet' }
+
+    it 'passes headers to Faraday' do
+      expect(Svelte::RestClient).to receive(:call).with(verb: verb,
+                                                        url: url,
+                                                        params: params,
+                                                        headers: headers,
+                                                        options: options)
+        described_class.call(verb: verb,
+                             path: path,
+                             configuration: configuration,
+                             parameters: parameters,
+                             headers: headers,
+                             options: options)
     end
   end
 end

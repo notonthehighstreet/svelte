@@ -11,7 +11,7 @@ module Svelte
       # @param configuration [Configuration] Swagger API configuration
       # @param parameters [Hash] payload of the request, i.e. `{ petId: 1}`
       # @param options [Hash] request options, i.e. `{ timeout: 10 }`
-      def call(verb:, path:, configuration:, parameters:, options:)
+      def call(verb:, path:, configuration:, parameters:, options:, headers: nil)
         url = url_for(configuration: configuration,
                       path: path,
                       parameters: parameters)
@@ -20,7 +20,8 @@ module Svelte
         RestClient.call(verb: verb,
                         url: url,
                         params: request_parameters,
-                        options: options)
+                        options: options,
+                        headers: headers)
       end
 
       private
