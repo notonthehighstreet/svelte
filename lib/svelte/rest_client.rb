@@ -18,10 +18,10 @@ module Svelte
       #   an exception will be raised
       #
       # @return [Faraday::Response] http response from the service
-      def call(verb:, url:, params: {}, options: {}, headers: nil)
+      def call(verb:, url:, params: {}, options: {}, headers: {})
         connection.send verb, url, params do |request|
           request.options.timeout = options[:timeout] if options[:timeout]
-          request.headers = headers unless headers.nil?
+          request.headers = headers
         end
       rescue Faraday::TimeoutError => e
         raise HTTPError.new(parent: e)

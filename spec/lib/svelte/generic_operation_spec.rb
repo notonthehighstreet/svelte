@@ -25,6 +25,7 @@ describe Svelte::GenericOperation do
         let(:url_path) { '/pet/{petId}' }
         let(:parameter_elements) { ['petId'] }
         let(:params) { {} }
+        let(:headers) { {} }
 
         let(:parameters) do
           {
@@ -39,12 +40,13 @@ describe Svelte::GenericOperation do
                                                             url: url,
                                                             params: params,
                                                             options: options,
-                                                            headers: nil)
+                                                            headers: headers)
           described_class.call(verb: verb,
                                path: path,
                                configuration: configuration,
                                parameters: parameters,
-                               options: options)
+                               options: options,
+                               headers: headers)
         end
       end
 
@@ -52,6 +54,7 @@ describe Svelte::GenericOperation do
         let(:url_path) { '/pet/{petId}/hobbies' }
         let(:parameter_elements) { ['petId'] }
         let(:params) { {} }
+        let(:headers) { {} }
 
         let(:parameters) do
           {
@@ -66,12 +69,13 @@ describe Svelte::GenericOperation do
                                                             url: url,
                                                             params: params,
                                                             options: options,
-                                                            headers: nil)
+                                                            headers: headers)
           described_class.call(verb: verb,
                                path: path,
                                configuration: configuration,
                                parameters: parameters,
-                               options: options)
+                               options: options,
+                               headers: headers)
         end
       end
     end
@@ -80,6 +84,7 @@ describe Svelte::GenericOperation do
       let(:url_path) { '/pet' }
       let(:parameter_elements) { [] }
       let(:params) { parameters }
+      let(:headers) { {} }
       let(:parameters) do
         {
           'petId' => pet_id
@@ -93,12 +98,13 @@ describe Svelte::GenericOperation do
                                                           url: url,
                                                           params: params,
                                                           options: options,
-                                                          headers: nil)
+                                                          headers: headers)
         described_class.call(verb: verb,
                              path: path,
                              configuration: configuration,
                              parameters: parameters,
-                             options: options)
+                             options: options,
+                             headers: headers)
       end
     end
 
