@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Svelte
   # Dynamically builds Swagger API operations on top of a given module
   class OperationBuilder
@@ -15,7 +17,8 @@ module Svelte
             path: operation.path,
             configuration: configuration,
             parameters: builder.request_parameters(full_parameters: parameters),
-            options: builder.options(full_parameters: parameters))
+            options: builder.options(full_parameters: parameters)
+          )
         end
       end
 
@@ -28,6 +31,7 @@ module Svelte
       # @note All keys will be transformed from `Symbol` to `String`
       def request_parameters(full_parameters:)
         return {} if full_parameters.compact.empty?
+
         full_parameters.first.inject({}) do |memo, (k, v)|
           memo.merge!(k.to_s => v)
         end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Svelte
   # Provides helper methods to manipulate strings in order to generate
   # valid constant and method names from them
@@ -43,9 +45,7 @@ module Svelte
 
       def pascalize(string)
         string.split('-').map do |dash|
-          dash.split('_').map do |underscore|
-            underscore.split
-          end.flatten
+          dash.split('_').map(&:split).flatten
         end.flatten.map(&method(:capitalize_first_char)).join
       end
 
@@ -54,8 +54,8 @@ module Svelte
       end
 
       def snakify(string)
-        string.gsub(/\s+/, '_').
-        gsub('-', '_').
+        string.gsub(/\s+/, '_')
+              .gsub('-', '_').
           # This first regex handles the case of a string ending in an acroynm
           gsub(/([a-z])([A-Z]+)\z/, '\1_\2').
           # This regex then handles acronyms in other places, including at

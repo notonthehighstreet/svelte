@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'svelte/version'
 require 'svelte/string_manipulator'

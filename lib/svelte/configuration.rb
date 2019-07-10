@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Svelte
   # Holds miscelanious configuration options for the current
   # Swagger API specification

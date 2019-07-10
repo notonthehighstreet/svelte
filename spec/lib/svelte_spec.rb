@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Svelte do
@@ -6,7 +8,7 @@ describe Svelte do
     let(:module_name) { 'PetStore' }
     let(:options) do
       {
-          protocol: 'http'
+        protocol: 'http'
       }
     end
 
@@ -14,7 +16,7 @@ describe Svelte do
       let(:module_constants) do
         {
           "#{module_name}::Pet" =>
-            %w(addPet updatePet getPetById updatePetWithForm deletePet),
+            %w[addPet updatePet getPetById updatePetWithForm deletePet],
           "#{module_name}::Pet::FindByStatus" =>
             ['findPetsByStatus'],
           "#{module_name}::Pet::FindByTags" =>
@@ -24,7 +26,7 @@ describe Svelte do
           "#{module_name}::Store::Inventory" =>
             ['getInventory'],
           "#{module_name}::Store::Order" =>
-            %w(placeOrder getOrderById deleteOrder),
+            %w[placeOrder getOrderById deleteOrder],
           "#{module_name}::Store::Inventory" =>
             ['getInventory'],
           "#{module_name}::User::CreateWithArray" =>
@@ -36,7 +38,7 @@ describe Svelte do
           "#{module_name}::User::Logout" =>
             ['logoutUser'],
           "#{module_name}::User" =>
-            %w(createUser getUserByName updateUser deleteUser)
+            %w[createUser getUserByName updateUser deleteUser]
         }
       end
 
@@ -99,8 +101,8 @@ describe Svelte do
             .to_return(body: json, status: 200)
 
           described_class.create(url: url, module_name: module_name, options: {
-            auth: { token: 'Bearer 12345' }
-          })
+                                   auth: { token: 'Bearer 12345' }
+                                 })
 
           assert_requested(:any, url, headers: { 'Authorization' => 'Bearer 12345' })
         end
@@ -112,8 +114,8 @@ describe Svelte do
             .to_return(body: json, status: 200)
 
           described_class.create(url: url, module_name: module_name, options: {
-            auth: { basic: { username: 'user', password: 'pass' } }
-          })
+                                   auth: { basic: { username: 'user', password: 'pass' } }
+                                 })
 
           assert_requested(:any, url, headers: { 'Authorization' => 'Basic dXNlcjpwYXNz' })
         end
@@ -125,8 +127,8 @@ describe Svelte do
             .to_return(body: json, status: 200)
 
           described_class.create(url: url, module_name: module_name, options: {
-            headers: { test: 'value' }
-          })
+                                   headers: { test: 'value' }
+                                 })
 
           assert_requested(:any, url, headers: { 'test' => 'value' })
         end

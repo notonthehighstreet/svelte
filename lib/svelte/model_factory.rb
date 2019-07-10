@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'svelte/model_factory/parameter'
 
 module Svelte
@@ -11,6 +13,7 @@ module Svelte
     # @return [Hash] A hash of model names to models created
     def define_models(json)
       return unless json
+
       models = {}
       model_definitions = json['definitions']
       model_definitions.each do |model_name, parameters|
@@ -83,6 +86,7 @@ module Svelte
         required_nested_models = nested_models.keys & required_attributes
         nested_models.each do |nested_model_name, nested_model_info|
           return unless required_nested_models.include?(nested_model_name)
+
           nested_class_name = public_send("#{nested_model_name}=",
                                           nested_model_info['$ref']
                                             .split('/').last)

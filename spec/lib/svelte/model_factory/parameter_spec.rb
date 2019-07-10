@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 require 'svelte/model_factory/parameter'
@@ -119,7 +121,7 @@ describe Svelte::ModelFactory::Parameter do
       end
 
       context 'when value is an integer' do
-        let(:value) { 1234567890 }
+        let(:value) { 1_234_567_890 }
         it 'returns no message' do
           expect(subject.validate).to eq('')
         end

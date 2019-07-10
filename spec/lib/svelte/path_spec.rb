@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Svelte::Path do
@@ -11,7 +13,7 @@ describe Svelte::Path do
     let(:path_key) { '/store/inventory' }
 
     it 'has the correct non parameter elements' do
-      expect(path.non_parameter_elements).to match_array(%w(store inventory))
+      expect(path.non_parameter_elements).to match_array(%w[store inventory])
     end
 
     it 'has the correct parameter elements' do
@@ -37,7 +39,7 @@ describe Svelte::Path do
     let(:path_key) { '/store/order/{orderId}' }
 
     it 'has the correct non parameter elements' do
-      expect(path.non_parameter_elements).to match_array(%w(store order))
+      expect(path.non_parameter_elements).to match_array(%w[store order])
     end
 
     it 'has the correct parameter elements' do
@@ -55,7 +57,7 @@ describe Svelte::Path do
 
       it 'the array has the correct operations' do
         expect(path.operations.map(&:id))
-          .to match_array(%w(getOrderById deleteOrder))
+          .to match_array(%w[getOrderById deleteOrder])
       end
     end
   end

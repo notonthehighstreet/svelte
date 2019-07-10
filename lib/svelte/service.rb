@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'base64'
 
 module Svelte
@@ -9,7 +11,7 @@ module Svelte
       # @param json [String] full Swagger API spec as a String
       # @param module_name [String] constant name where Svelte will
       #   build the functionality on top of
-      # @param options [Hash] options passed as configuration to the 
+      # @param options [Hash] options passed as configuration to the
       #   generated Swagger objects.  :auth options will also be
       #   used here when making the initial Swagger spec request.
       # @return [Module] A newly created `Module` with the
@@ -53,13 +55,13 @@ module Svelte
 
           if basic
             credentials = Base64.encode64([
-              basic[:username], 
+              basic[:username],
               basic[:password]
             ].join(':')).chomp
 
-            headers["Authorization"] = "Basic #{credentials}"
+            headers['Authorization'] = "Basic #{credentials}"
           elsif token
-            headers["Authorization"] = token
+            headers['Authorization'] = token
           end
         end
 
