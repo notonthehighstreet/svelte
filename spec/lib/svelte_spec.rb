@@ -74,7 +74,7 @@ describe Svelte do
 
     context 'with an online json' do
       let(:url) { 'http://www.example.com/petstore.json' }
-      
+
       context 'with default options' do
         before do
           stub_request(:any, url)
@@ -97,27 +97,25 @@ describe Svelte do
         it 'sets the correct headers' do
           stub_request(:any, url)
             .to_return(body: json, status: 200)
-  
+
           described_class.create(url: url, module_name: module_name, options: {
             auth: { token: 'Bearer 12345' }
           })
-    
+
           assert_requested(:any, url, headers: { 'Authorization' => 'Bearer 12345' })
         end
       end
 
       context 'with basic authentication' do
-        let(:url_with_auth) { 'http://user:pass@www.example.com/petstore.json' }
-        
         it 'sets the correct headers' do
-          stub_request(:any, url_with_auth)
+          stub_request(:any, url)
             .to_return(body: json, status: 200)
-  
+
           described_class.create(url: url, module_name: module_name, options: {
             auth: { basic: { username: 'user', password: 'pass' } }
           })
-  
-          assert_requested(:any, url_with_auth)
+
+          assert_requested(:any, url, headers: { 'Authorization' => 'Basic dXNlcjpwYXNz' })
         end
       end
 
@@ -125,11 +123,11 @@ describe Svelte do
         it 'sets the correct headers' do
           stub_request(:any, url)
             .to_return(body: json, status: 200)
-  
+
           described_class.create(url: url, module_name: module_name, options: {
             headers: { test: 'value' }
           })
-  
+
           assert_requested(:any, url, headers: { 'test' => 'value' })
         end
       end
