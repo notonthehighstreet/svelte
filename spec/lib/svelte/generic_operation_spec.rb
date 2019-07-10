@@ -10,13 +10,15 @@ describe Svelte::GenericOperation do
   let(:base_path) { '/' }
   let(:host) { 'localhost' }
   let(:parameters) { {} }
-  let(:options) { {} }
+  let(:options) { { headers: { test: "value" } } }
   let(:protocol) { 'http' }
+  let(:headers) { { test: 'value' } }
   let(:configuration) do
     double(:configuration,
            host: host,
            base_path: base_path,
-           protocol: protocol)
+           protocol: protocol,
+           headers: headers)
   end
 
   context '#call' do

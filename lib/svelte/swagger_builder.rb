@@ -1,17 +1,19 @@
 module Svelte
   # Dynamically builds Swagger API paths and operations on top of a given module
   class SwaggerBuilder
-    attr_reader :raw_hash, :module_name, :configuration
+    attr_reader :raw_hash, :module_name, :configuration, :headers
 
     # Creates a new SwaggerBuilder
     # @param raw_hash [Hash] Swagger API definition
     # @param module_name [String] name of the constant you want built
     # @param options [Hash] Swagger API options. It will be used to build the
-    #   [Configuration]. Supports the `:host` value for now.
-    def initialize(raw_hash:, module_name:, options:)
+    #   [Configuration]. Supported values: ":host", ":base_path", ":protocol"
+    # @param headers [Hash] REST client HTTP request headers
+    def initialize(raw_hash:, module_name:, options:, headers:)
       @raw_hash = raw_hash
       @module_name = module_name
-      @configuration = build_configuration(options)
+      @configuration = build_configuration(options, headers)
+      @headers = headers
       validate
     end
 
@@ -51,11 +53,12 @@ module Svelte
 
     private
 
-    def build_configuration(_options)
+    def build_configuration(_options, headers)
       options = {
-          host: host,
-          base_path: base_path,
-          protocol: _options[:protocol]
+          host: _options[:host] || host,
+          base_path: _options[:base_path] || base_path,
+          protocol: _options[:protocol],
+          headers: headers || {}
       }
       Configuration.new(options: options)
     end

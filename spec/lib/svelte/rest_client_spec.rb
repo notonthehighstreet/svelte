@@ -13,6 +13,23 @@ describe Svelte::RestClient do
       .to be_an_instance_of(Faraday::Response)
   end
 
+  it 'should set optional headers' do
+    stub_request(verb, test_url)
+      .to_return(status: 404, body: '')
+
+    described_class.call(verb: verb, url: test_url, options: { 
+      headers: { 
+        'Test' => 'value', 
+        'Other' => 'value2' 
+      } 
+    })
+
+    assert_requested(:any, test_url, headers: { 
+      test: 'value', 
+      other: 'value2' 
+    })
+  end
+
   context 'when the remote service is very slow' do
     before do
       stub_request(verb, test_url)
