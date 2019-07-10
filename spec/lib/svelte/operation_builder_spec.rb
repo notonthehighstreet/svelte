@@ -5,7 +5,7 @@ describe Svelte::OperationBuilder do
   let(:method_name) { 'operation_id' }
   let(:verb) { 'get' }
   let(:path) { double(:path) }
-  let(:properties) { {parameters: []} }
+  let(:properties) { { "parameters" => []} }
   let(:operation) do
     double(:operation,
            id: operation_id,
@@ -38,7 +38,7 @@ describe Svelte::OperationBuilder do
   context 'when invoking the method without options' do
     let(:parameters) do
       {
-        request_parameter: request_parameter
+        'request_parameter' => request_parameter
       }
     end
 
@@ -110,7 +110,7 @@ describe Svelte::OperationBuilder do
       ]
     end
 
-    let(:properties) { {parameters: parameters} }
+    let(:properties) { { "parameters" => parameters } }
 
     let(:request_parameters) do
       {
