@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Svelte
   # Dynamically builds Swagger API paths and operations on top of a given module
   class SwaggerBuilder
@@ -55,10 +57,10 @@ module Svelte
 
     def build_configuration(_options, headers)
       options = {
-          host: _options[:host] || host,
-          base_path: _options[:base_path] || base_path,
-          protocol: _options[:protocol],
-          headers: headers || {}
+        host: _options[:host] || host,
+        base_path: _options[:base_path] || base_path,
+        protocol: _options[:protocol],
+        headers: headers || {}
       }
       Configuration.new(options: options)
     end
@@ -71,9 +73,7 @@ module Svelte
     end
 
     def validate_version
-      if raw_hash['swagger'] != '2.0'
-        raise VersionError
-      end
+      raise VersionError if raw_hash['swagger'] != '2.0'
     end
 
     def validate_paths

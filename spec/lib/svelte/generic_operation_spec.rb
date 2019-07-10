@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Svelte::GenericOperation do
@@ -10,7 +12,7 @@ describe Svelte::GenericOperation do
   let(:base_path) { '/' }
   let(:host) { 'localhost' }
   let(:parameters) { {} }
-  let(:options) { { headers: { test: "value" } } }
+  let(:options) { { headers: { test: 'value' } } }
   let(:protocol) { 'http' }
   let(:headers) { { test: 'value' } }
   let(:configuration) do
@@ -56,7 +58,7 @@ describe Svelte::GenericOperation do
 
         let(:parameters) do
           {
-              'petId' => pet_id
+            'petId' => pet_id
           }
         end
         let(:pet_id) { 1 }

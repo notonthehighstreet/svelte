@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Svelte::OperationBuilder do
@@ -46,7 +48,8 @@ describe Svelte::OperationBuilder do
         path: path,
         configuration: configuration,
         parameters: { 'request_parameter' => request_parameter },
-        options: {})
+        options: {}
+      )
 
       module_constant.public_send(method_name, parameters)
     end
@@ -71,7 +74,8 @@ describe Svelte::OperationBuilder do
         path: path,
         configuration: configuration,
         parameters: { 'request_parameter' => request_parameter },
-        options: options)
+        options: options
+      )
 
       module_constant.public_send(method_name, parameters, options)
     end
@@ -84,7 +88,8 @@ describe Svelte::OperationBuilder do
         path: path,
         configuration: configuration,
         parameters: {},
-        options: {})
+        options: {}
+      )
 
       module_constant.public_send(method_name)
     end

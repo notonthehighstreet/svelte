@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Svelte
   # Describes a Swagger API Operation
   class Operation

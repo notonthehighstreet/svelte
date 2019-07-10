@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Svelte
   # Svelte error class to represent networking errors
   # It can be customized by passing a specific errror message and
@@ -11,7 +13,7 @@ module Svelte
     # @param parent the parent exception
     def initialize(message: nil, parent: nil)
       @parent = parent
-      super(message || (parent && parent.message))
+      super(message || (parent&.message))
     end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Svelte
   # Class that handles the actual execution of dynamically generated operations
   # Each created operation will eventually call this class in order to make the
@@ -17,7 +19,7 @@ module Svelte
                       parameters: parameters)
         request_parameters = clean_parameters(path: path,
                                               parameters: parameters)
-        request_options = build_request_options(configuration: configuration, 
+        request_options = build_request_options(configuration: configuration,
                                                 options: options)
         RestClient.call(verb: verb,
                         url: url,
@@ -32,9 +34,7 @@ module Svelte
         protocol = configuration.protocol
         host = configuration.host
         base_path = configuration.base_path
-        if base_path == '/'
-          base_path = ''
-        end
+        base_path = '' if base_path == '/'
         "#{protocol}://#{host}#{base_path}#{url_path}"
       end
 
@@ -59,8 +59,8 @@ module Svelte
       end
 
       def build_request_options(configuration:, options:)
-        if configuration.headers && configuration.headers.any?
-          return (options || {}).merge({ headers: configuration.headers })
+        if configuration.headers&.any?
+          return (options || {}).merge(headers: configuration.headers)
         end
 
         options
