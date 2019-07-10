@@ -61,7 +61,7 @@ module Svelte
 
         headers = request_parameters.select { |key, val| header_names.include?(key)}
         request_parameters.reject! { |key, val| header_names.include?(key) }
-        headers.empty? ? nil : headers
+        headers.empty? ? {} : headers
       end
     end
   end

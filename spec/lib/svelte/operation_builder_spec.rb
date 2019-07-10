@@ -46,7 +46,7 @@ describe Svelte::OperationBuilder do
       expect(Svelte::GenericOperation).to receive(:call).with(
         verb: verb,
         path: path,
-        headers: nil,
+        headers: {},
         configuration: configuration,
         parameters: { 'request_parameter' => request_parameter },
         options: {})
@@ -58,7 +58,7 @@ describe Svelte::OperationBuilder do
   context 'when invoking the method with options' do
     let(:parameters) do
       {
-        request_parameter: request_parameter
+        "request_parameter" => request_parameter
       }
     end
 
@@ -72,7 +72,7 @@ describe Svelte::OperationBuilder do
       expect(Svelte::GenericOperation).to receive(:call).with(
         verb: verb,
         path: path,
-        headers: nil,
+        headers: {},
         configuration: configuration,
         parameters: { 'request_parameter' => request_parameter },
         options: options)
@@ -86,7 +86,7 @@ describe Svelte::OperationBuilder do
       expect(Svelte::GenericOperation).to receive(:call).with(
         verb: verb,
         path: path,
-        headers: nil, 
+        headers: {},
         configuration: configuration,
         parameters: {},
         options: {})

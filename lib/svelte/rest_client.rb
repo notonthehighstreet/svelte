@@ -14,6 +14,7 @@ module Svelte
       # @param url [String] request url
       # @param params [Hash] parameters to send to the request
       # @param options [Hash] options
+      # @param headers [Hash] headers
       # @raise [HTTPError] if an HTTP layer error occurs,
       #   an exception will be raised
       #
