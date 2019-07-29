@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'svelte/version'
 require 'svelte/string_manipulator'
@@ -29,6 +31,13 @@ module Svelte
   # @param json [String] the entire Swagger spec as a String
   # @param module_name [String] constant name where you want Svelte to build
   #   the new functionality on top of
+  # @param options [Hash] configuration options when making HTTP requests
+  #   Supported values are:
+  #     :auth [Hash] either { token: "value" } or { basic: { username: "value", password: "value" }}
+  #     :headers [Hash] HTTP request headers
+  #     :host [String] overrides the "host" value in the Swagger spec
+  #     :base_path [String] overrides the "basePath" value in the Swagger spec
+  #     :protocol [String] overrides the network protocol used (defaults to "http")
   # @note Either `url` or `json` need to be provided. `url` will take
   #   precedence over `json`
   def self.create(url: nil, json: nil, module_name:, options: {})

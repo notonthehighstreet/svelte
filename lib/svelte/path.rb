@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Svelte
   # Describes a Swagger API Path
   class Path
@@ -34,7 +36,7 @@ module Svelte
 
     def validate_operations
       unless @raw_operations.is_a?(Hash)
-        raise JSONError, "Expected the path to contain a list of operations"
+        raise JSONError, 'Expected the path to contain a list of operations'
       end
     end
   end

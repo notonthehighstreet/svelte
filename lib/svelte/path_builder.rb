@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Svelte
   # Dynamically builds a module hierarchy on top of a given module
   # based on the given Path

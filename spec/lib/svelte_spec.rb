@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Svelte do
@@ -6,7 +8,7 @@ describe Svelte do
     let(:module_name) { 'PetStore' }
     let(:options) do
       {
-          protocol: 'http'
+        protocol: 'http'
       }
     end
 
@@ -14,7 +16,7 @@ describe Svelte do
       let(:module_constants) do
         {
           "#{module_name}::Pet" =>
-            %w(addPet updatePet getPetById updatePetWithForm deletePet),
+            %w[addPet updatePet getPetById updatePetWithForm deletePet],
           "#{module_name}::Pet::FindByStatus" =>
             ['findPetsByStatus'],
           "#{module_name}::Pet::FindByTags" =>
@@ -24,7 +26,7 @@ describe Svelte do
           "#{module_name}::Store::Inventory" =>
             ['getInventory'],
           "#{module_name}::Store::Order" =>
-            %w(placeOrder getOrderById deleteOrder),
+            %w[placeOrder getOrderById deleteOrder],
           "#{module_name}::Store::Inventory" =>
             ['getInventory'],
           "#{module_name}::User::CreateWithArray" =>
@@ -36,7 +38,7 @@ describe Svelte do
           "#{module_name}::User::Logout" =>
             ['logoutUser'],
           "#{module_name}::User" =>
-            %w(createUser getUserByName updateUser deleteUser)
+            %w[createUser getUserByName updateUser deleteUser]
         }
       end
 
@@ -75,20 +77,61 @@ describe Svelte do
     context 'with an online json' do
       let(:url) { 'http://www.example.com/petstore.json' }
 
-      before do
-        stub_request(:any, url)
-          .to_return(body: json, status: 200)
+      context 'with default options' do
+        before do
+          stub_request(:any, url)
+            .to_return(body: json, status: 200)
 
-        described_class.create(url: url, module_name: module_name)
+          described_class.create(url: url, module_name: module_name)
+        end
+
+        include_examples 'builds all the things'
+
+        it 'raises a Svelte::HTTPException on http errors' do
+          stub_request(:any, url).to_timeout
+
+          expect { described_class.create(url: url, module_name: module_name, options: options) }
+            .to raise_error(Svelte::HTTPError, "Could not get API json from #{url}")
+        end
       end
 
-      include_examples 'builds all the things'
+      context 'with a bearer token' do
+        it 'sets the correct headers' do
+          stub_request(:any, url)
+            .to_return(body: json, status: 200)
 
-      it 'raises a Svelte::HTTPException on http errors' do
-        stub_request(:any, url).to_timeout
+          described_class.create(url: url, module_name: module_name, options: {
+                                   auth: { token: 'Bearer 12345' }
+                                 })
 
-        expect { described_class.create(url: url, module_name: module_name, options: options) }
-          .to raise_error(Svelte::HTTPError, "Could not get API json from #{url}")
+          assert_requested(:any, url, headers: { 'Authorization' => 'Bearer 12345' })
+        end
+      end
+
+      context 'with basic authentication' do
+        it 'sets the correct headers' do
+          stub_request(:any, url)
+            .to_return(body: json, status: 200)
+
+          described_class.create(url: url, module_name: module_name, options: {
+                                   auth: { basic: { username: 'user', password: 'pass' } }
+                                 })
+
+          assert_requested(:any, url, headers: { 'Authorization' => 'Basic dXNlcjpwYXNz' })
+        end
+      end
+
+      context 'with arbitrary headers' do
+        it 'sets the correct headers' do
+          stub_request(:any, url)
+            .to_return(body: json, status: 200)
+
+          described_class.create(url: url, module_name: module_name, options: {
+                                   headers: { test: 'value' }
+                                 })
+
+          assert_requested(:any, url, headers: { 'test' => 'value' })
+        end
       end
     end
 

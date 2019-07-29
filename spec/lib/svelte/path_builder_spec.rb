@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe Svelte::PathBuilder do
   let(:json) { JSON.parse(File.read('spec/fixtures/petstore.json')) }
-  let(:non_parameter_elements) { %w(store inventory) }
+  let(:non_parameter_elements) { %w[store inventory] }
   let(:path) { double(:path, non_parameter_elements: non_parameter_elements) }
   let(:module_constant) { Module.new }
 

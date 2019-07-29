@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'svelte/model_factory'
 
@@ -29,7 +31,7 @@ describe ModelFactoryTest do
   let(:truth) { true }
   let(:number) { 42 }
   let(:other_number) { 8_675_309 }
-  let(:required_fields) { %w(Name NestedModel) }
+  let(:required_fields) { %w[Name NestedModel] }
 
   let(:json_model) do
     { 'definitions' =>
@@ -61,8 +63,7 @@ describe ModelFactoryTest do
                 42
               ]
             }
-          }
-        },
+          } },
         nested_model_class.to_s =>
         { 'id' => nested_model_class.to_s,
           'description' => '',
@@ -71,10 +72,7 @@ describe ModelFactoryTest do
             'Name' => {
               'type' => 'string', 'description' => 'A name'
             }
-          }
-        }
-      }
-    }
+          } } } }
   end
 
   before(:each) do

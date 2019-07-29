@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'faraday'
 require 'faraday_middleware'
 require 'typhoeus'
@@ -7,7 +9,6 @@ module Svelte
   # Rest client to make requests to the service endpoints
   class RestClient
     class << self
-
       # Makes an http call to a given REST endpoint
       # @param verb [String] http verb to use for the request
       #   (`get`, `post`, `put`, etc.)
@@ -22,7 +23,9 @@ module Svelte
       def call(verb:, url:, params: {}, options: {}, headers: {})
         connection.send verb, url, params do |request|
           request.options.timeout = options[:timeout] if options[:timeout]
-          request.headers = headers
+
+          options[:headers]&.each { |key, value| request.headers[key] = value }
+          headers.each { |key, value| request.headers[key] = value }
         end
       rescue Faraday::TimeoutError => e
         raise HTTPError.new(parent: e)

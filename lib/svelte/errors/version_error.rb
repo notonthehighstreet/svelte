@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Svelte
   # Svelte error class to represent version errors.
   # Raised when a Swagger v1 JSON is fed into Svelte

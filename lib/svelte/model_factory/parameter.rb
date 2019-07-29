@@ -1,8 +1,9 @@
+# frozen_string_literal: true
+
 module Svelte
   module ModelFactory
     # Helper class to wrap around all parameters
     class Parameter
-
       # Constant to represent an unset parameter
       UNSET = Class.new
 
@@ -83,11 +84,13 @@ module Svelte
       def validate_required
         return true unless @required
         return false if unset?
+
         true
       end
 
       def validate_value_in_enum
         return true if @permitted_values.empty?
+
         @permitted_values.include?(value)
       end
 
