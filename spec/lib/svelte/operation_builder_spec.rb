@@ -7,7 +7,7 @@ describe Svelte::OperationBuilder do
   let(:method_name) { 'operation_id' }
   let(:verb) { 'get' }
   let(:path) { double(:path) }
-  let(:properties) { {parameters: []} }
+  let(:properties) { {"parameters" => []} }
   let(:operation) do
     double(:operation,
            id: operation_id,
@@ -105,17 +105,17 @@ describe Svelte::OperationBuilder do
     let(:parameters) do
       [
         {
-          in: "header",
-          name: "Authorization",
+          "in" => "header",
+          "name" => "authorization"
         },
         {
-          in: "body",
-          name: "foo"
+          "in" => "body",
+          "name" => "foo"
         }
       ]
     end
 
-    let(:properties) { {parameters: parameters} }
+    let(:properties) { {"parameters" => parameters} }
 
     let(:request_parameters) do
       {

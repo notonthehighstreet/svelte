@@ -19,14 +19,14 @@ module Svelte
                       parameters: parameters)
         request_parameters = clean_parameters(path: path,
                                               parameters: parameters)
-        request_options = build_request_options(configuration: configuration,
-                                                options: options)
+        request_headers = build_request_headers(configuration: configuration,
+                                                options: options,
+                                                headers: headers)
         RestClient.call(verb: verb,
                         url: url,
                         params: request_parameters,
-                        options: options,
-                        headers: headers,
-                        options: request_options)
+                        headers: request_headers,
+                        options: options)
       end
 
       private
@@ -60,12 +60,12 @@ module Svelte
         clean_parameters
       end
 
-      def build_request_options(configuration:, options:)
-        if configuration.headers&.any?
-          return (options || {}).merge(headers: configuration.headers)
-        end
+      def build_request_headers(configuration:, options:, headers:)
+        configuration_headers = configuration.headers || {}
+        options_headers = options[:headers] || {}
+        request_headers = headers || {}
 
-        options
+        configuration_headers.merge(options_headers).merge(request_headers)
       end
     end
   end

@@ -14,7 +14,7 @@ module Svelte
         module_constant.define_singleton_method(method_name) do |*parameters|
           request_parameters = builder.request_parameters(full_parameters: parameters)
           headers = builder.strip_headers!(
-            operation_parameters: operation.properties[:parameters],
+            operation_parameters: operation.properties["parameters"],
             request_parameters: request_parameters)
 
           GenericOperation.call(
@@ -22,7 +22,7 @@ module Svelte
             path: operation.path,
             configuration: configuration,
             headers: headers,
-            parameters: builder.request_parameters(full_parameters: parameters),
+            parameters: request_parameters,
             options: builder.options(full_parameters: parameters)
           )
         end
@@ -59,7 +59,7 @@ module Svelte
       # @return [Hash] The headers for GenericOperation to build the request
       def strip_headers!(operation_parameters:, request_parameters:)
         header_names = operation_parameters.reduce([]) do |memo, param|
-          memo.push(param[:name].downcase) if param[:in] == 'header'
+          memo.push(param["name"].downcase) if param["in"] == 'header'
           memo
         end
 

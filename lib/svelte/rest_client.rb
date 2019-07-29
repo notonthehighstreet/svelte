@@ -21,11 +21,8 @@ module Svelte
       #
       # @return [Faraday::Response] http response from the service
       def call(verb:, url:, params: {}, options: {}, headers: {})
-        connection.send verb, url, params do |request|
+        connection.send verb, url, params, headers do |request|
           request.options.timeout = options[:timeout] if options[:timeout]
-
-          options[:headers]&.each { |key, value| request.headers[key] = value }
-          headers.each { |key, value| request.headers[key] = value }
         end
       rescue Faraday::TimeoutError => e
         raise HTTPError.new(parent: e)
