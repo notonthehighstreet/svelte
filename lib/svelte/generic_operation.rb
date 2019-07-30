@@ -13,6 +13,7 @@ module Svelte
       # @param configuration [Configuration] Swagger API configuration
       # @param parameters [Hash] payload of the request, i.e. `{ petId: 1}`
       # @param options [Hash] request options, i.e. `{ timeout: 10 }`
+      # @param headers [Hash] headers to be included in the request
       def call(verb:, path:, configuration:, parameters:, options:, headers: nil)
         url = url_for(configuration: configuration,
                       path: path,
