@@ -12,9 +12,10 @@ describe Svelte::GenericOperation do
   let(:base_path) { '/' }
   let(:host) { 'localhost' }
   let(:parameters) { {} }
-  let(:options) { { headers: { test: 'value' } } }
+  let(:options) { {} }
   let(:protocol) { 'http' }
-  let(:headers) { { test: 'value' } }
+  let(:headers) { nil }
+  let(:request_headers) { {} }
   let(:configuration) do
     double(:configuration,
            host: host,
@@ -42,7 +43,8 @@ describe Svelte::GenericOperation do
           expect(Svelte::RestClient).to receive(:call).with(verb: verb,
                                                             url: url,
                                                             params: params,
-                                                            options: options)
+                                                            options: options,
+                                                            headers: request_headers)
           described_class.call(verb: verb,
                                path: path,
                                configuration: configuration,
@@ -68,7 +70,8 @@ describe Svelte::GenericOperation do
           expect(Svelte::RestClient).to receive(:call).with(verb: verb,
                                                             url: url,
                                                             params: params,
-                                                            options: options)
+                                                            options: options,
+                                                            headers: request_headers)
           described_class.call(verb: verb,
                                path: path,
                                configuration: configuration,
@@ -94,7 +97,8 @@ describe Svelte::GenericOperation do
         expect(Svelte::RestClient).to receive(:call).with(verb: verb,
                                                           url: url,
                                                           params: params,
-                                                          options: options)
+                                                          options: options,
+                                                          headers: request_headers)
         described_class.call(verb: verb,
                              path: path,
                              configuration: configuration,
@@ -113,10 +117,84 @@ describe Svelte::GenericOperation do
                                path: path,
                                configuration: configuration,
                                parameters: parameters,
-                               options: options)
+                               options: options,
+                               headers: nil)
         end
           .to raise_error(Svelte::ParameterError,
                           'Required parameter `petId` missing')
+      end
+    end
+
+    context 'with headers specified in options' do
+      let(:options) { { headers: { test: 'value' } } }
+      let(:request_headers) { { test: 'value' } }
+      let(:url) { 'http://localhost/pet' }
+      let(:parameter_elements) { [] }
+      let(:params) { {} }
+      let(:url_path) { '/pet' }
+
+      it 'passes headers to Faraday' do
+        expect(Svelte::RestClient).to receive(:call).with(verb: verb,
+                                                          url: url,
+                                                          params: params,
+                                                          headers: request_headers,
+                                                          options: options)
+
+        described_class.call(verb: verb,
+                            path: path,
+                            configuration: configuration,
+                            parameters: parameters,
+                            headers: headers,
+                            options: options)
+      end
+
+      context 'with headers specified in request' do
+        let(:headers) { { test: 'value' } }
+        let(:request_headers) { { test: 'value' } }
+        let(:url) { 'http://localhost/pet' }
+        let(:parameter_elements) { [] }
+        let(:params) { {} }
+        let(:url_path) { '/pet' }
+
+        it 'passes headers to Faraday' do
+          expect(Svelte::RestClient).to receive(:call).with(verb: verb,
+                                                            url: url,
+                                                            params: params,
+                                                            headers: request_headers,
+                                                            options: options)
+
+          described_class.call(verb: verb,
+                              path: path,
+                              configuration: configuration,
+                              parameters: parameters,
+                              headers: headers,
+                              options: options)
+        end
+      end
+
+      context 'with headers specified in options and overridden in request' do
+        let(:options) { { headers: { test: 'value1' } } }
+        let(:headers) { { test: 'value2' } }
+        let(:request_headers) { { test: 'value2' } }
+        let(:url) { 'http://localhost/pet' }
+        let(:parameter_elements) { [] }
+        let(:params) { {} }
+        let(:url_path) { '/pet' }
+
+        it 'passes headers to Faraday' do
+          expect(Svelte::RestClient).to receive(:call).with(verb: verb,
+                                                            url: url,
+                                                            params: params,
+                                                            headers: request_headers,
+                                                            options: options)
+
+          described_class.call(verb: verb,
+                               path: path,
+                               configuration: configuration,
+                               parameters: parameters,
+                               headers: headers,
+                               options: options)
+        end
       end
     end
   end

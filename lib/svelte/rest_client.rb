@@ -17,12 +17,12 @@ module Svelte
       # @param options [Hash] options
       # @raise [HTTPError] if an HTTP layer error occurs,
       #   an exception will be raised
+      # @param headers [Hash] headers to be sent along with the request
       #
       # @return [Faraday::Response] http response from the service
-      def call(verb:, url:, params: {}, options: {})
-        connection.send verb, url, params do |request|
+      def call(verb:, url:, params: {}, options: {}, headers: {})
+        connection.send verb, url, params, headers do |request|
           request.options.timeout = options[:timeout] if options[:timeout]
-          options[:headers]&.each { |key, value| request.headers[key] = value }
         end
       rescue Faraday::TimeoutError => e
         raise HTTPError.new(parent: e)
