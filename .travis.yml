@@ -1,8 +1,9 @@
 language: ruby
 rvm:
-  - '2.4.2'
-  - '2.5.1'
-  - '2.6.0'
+  - '2.4.10'
+  - '2.5.8'
+  - '2.6.6'
+  - '2.7.2'
 env:
   global:
     - CC_TEST_REPORTER_ID=b82d06c331e2b020fe95a3f884bfb04134156d8c2f740d570eeb550130506e22
