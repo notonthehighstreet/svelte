@@ -3,6 +3,7 @@
 module Svelte
   # Dynamically builds Swagger API operations on top of a given module
   class OperationBuilder
+    include HeadersBuilder
     class << self
       # Builds an operation on top of `module_constant`
       # @param operation [Svete::Operation] operation to build
@@ -10,12 +11,16 @@ module Svelte
       # @param configuration [Configuration] Swagger API configuration
       def build(operation:, module_constant:, configuration:)
         builder = self
+        builder.extend(HeadersBuilder)
         method_name = StringManipulator.method_name_for(operation.id)
         module_constant.define_singleton_method(method_name) do |*parameters|
+          options = builder.options(full_parameters: parameters)
           request_parameters = builder.request_parameters(full_parameters: parameters)
           headers = builder.strip_headers!(
             operation_parameters: operation.properties["parameters"],
             request_parameters: request_parameters)
+
+          headers = builder.build_headers(options: options).merge(headers)
 
           GenericOperation.call(
             verb: operation.verb,
@@ -23,7 +28,7 @@ module Svelte
             configuration: configuration,
             headers: headers,
             parameters: request_parameters,
-            options: builder.options(full_parameters: parameters)
+            options: options
           )
         end
       end
@@ -65,7 +70,7 @@ module Svelte
 
         headers = request_parameters.select { |key, val| header_names.include?(key)}
         request_parameters.reject! { |key, val| header_names.include?(key) }
-        headers.empty? ? nil : headers
+        headers.empty? ? {} : headers
       end
     end
   end

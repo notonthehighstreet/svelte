@@ -5,6 +5,7 @@ require 'base64'
 module Svelte
   # Dynamically generates a client to consume a Swagger API
   class Service
+    extend HeadersBuilder
     class << self
       # Generate a Service via URL or JSON.
       # @param url [String] full URL of the Swagger API spec
@@ -44,28 +45,6 @@ module Svelte
           message: "Could not get API json from #{url}",
           parent: e
         )
-      end
-
-      def build_headers(options:)
-        headers = options[:headers].is_a?(Hash) ? options[:headers].clone : {}
-
-        if options[:auth]
-          basic = options[:auth][:basic]
-          token = options[:auth][:token]
-
-          if basic
-            credentials = Base64.encode64([
-              basic[:username],
-              basic[:password]
-            ].join(':')).chomp
-
-            headers['Authorization'] = "Basic #{credentials}"
-          elsif token
-            headers['Authorization'] = token
-          end
-        end
-
-        headers
       end
     end
   end

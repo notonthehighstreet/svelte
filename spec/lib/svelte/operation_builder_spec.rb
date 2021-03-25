@@ -48,7 +48,7 @@ describe Svelte::OperationBuilder do
       expect(Svelte::GenericOperation).to receive(:call).with(
         verb: verb,
         path: path,
-        headers: nil,
+        headers: {},
         configuration: configuration,
         parameters: { 'request_parameter' => request_parameter },
         options: {}
@@ -75,7 +75,7 @@ describe Svelte::OperationBuilder do
       expect(Svelte::GenericOperation).to receive(:call).with(
         verb: verb,
         path: path,
-        headers: nil,
+        headers: {},
         configuration: configuration,
         parameters: { 'request_parameter' => request_parameter },
         options: options
@@ -90,7 +90,7 @@ describe Svelte::OperationBuilder do
       expect(Svelte::GenericOperation).to receive(:call).with(
         verb: verb,
         path: path,
-        headers: nil, 
+        headers: {},
         configuration: configuration,
         parameters: {},
         options: {}
