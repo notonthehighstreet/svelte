@@ -39,7 +39,7 @@ module Svelte
         connection = Faraday.new(url: url)
         headers.each { |key, value| connection.headers[key] = value }
         connection.get.body
-      rescue Faraday::ClientError => e
+      rescue Faraday::ClientError, Faraday::ConnectionFailed => e
         raise HTTPError.new(
           message: "Could not get API json from #{url}",
           parent: e
