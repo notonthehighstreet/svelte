@@ -4,7 +4,6 @@ Svelte is a Swagger-to-Ruby object mapper.
 
 It reads a Swagger specification file in JSON, and automatically generates Resource Classes with static methods to represent the various HTTP endpoints.
 
-[![Build Status](https://secure.travis-ci.org/notonthehighstreet/svelte.png?branch=main)](http://travis-ci.org/notonthehighstreet/svelte)
 [![Code Climate](https://codeclimate.com/github/notonthehighstreet/svelte/badges/gpa.svg)](https://codeclimate.com/github/notonthehighstreet/svelte)
 [![Depfu](https://badges.depfu.com/badges/b93998f152cc3865465c6de0d7284248/overview.svg)](https://depfu.com/github/notonthehighstreet/svelte?project_id=6754)
 [![Depfu](https://badges.depfu.com/badges/b93998f152cc3865465c6de0d7284248/count.svg)](https://depfu.com/github/notonthehighstreet/svelte?project_id=6754)
@@ -193,7 +192,7 @@ When creating a client from the API spec, you can pass an `options` hash that wi
 ```ruby
 Svelte::Service.create(
   url: "http://path/to/swagger/spec/resource.json",
-  module_name: 'PetStore', 
+  module_name: 'PetStore',
   options: {
     host: 'somehost.com',
     base_path: '/api/v1',
