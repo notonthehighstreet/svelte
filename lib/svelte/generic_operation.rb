@@ -23,6 +23,7 @@ module Svelte
         request_headers = build_request_headers(configuration: configuration,
                                                 options: options,
                                                 headers: headers)
+
         RestClient.call(verb: verb,
                         url: url,
                         params: request_parameters,
