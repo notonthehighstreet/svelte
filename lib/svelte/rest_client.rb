@@ -30,6 +30,8 @@ module Svelte
         raise HTTPError.new(parent: e)
       rescue Faraday::ClientError => e
         raise HTTPError.new(parent: e)
+      rescue Faraday::ConnectionFailed => e
+        raise HTTPError.new(parent: e)
       end
 
       private
