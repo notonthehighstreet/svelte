@@ -1,0 +1,53 @@
+version: 2.1
+jobs:
+  build:
+    parameters:
+      ruby_version:
+        type: string
+    docker:
+      - image: cimg/ruby:<< parameters.ruby_version >>
+    steps:
+      - checkout
+
+      - run:
+          name: install dependencies
+          command: |
+            gem install bundler
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+
+      - run:
+          name: run tests
+          command: |
+            ./cc-test-reporter before-build
+            mkdir /tmp/test-results
+            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
+            bundle exec rspec --format progress \
+                            --format RspecJunitFormatter \
+                            --out /tmp/test-results/rspec.xml \
+                            --format progress \
+                            ${TEST_FILES}
+            ./cc-test-reporter after-build --coverage-input-type simplecov --exit-code $?
+
+      # collect reports
+      - store_test_results:
+          path: /tmp/test-results
+      - store_artifacts:
+          path: /tmp/test-results
+          destination: test-results
+references:
+  matrix_build: &matrix_build
+    build:
+      matrix:
+        parameters:
+          ruby_version: ["2.6", "2.7", "3.0"]
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - <<: *matrix_build
