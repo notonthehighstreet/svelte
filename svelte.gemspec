@@ -20,7 +20,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   spec.required_ruby_version = '>= 2.4'
 
-  spec.add_dependency 'faraday', '>= 0.9'
+  spec.add_dependency 'faraday', '2.7.3'
   spec.add_dependency 'faraday_middleware', '>= 0.10'
   spec.add_dependency 'typhoeus', '~> 1.0'
 
