@@ -45,7 +45,7 @@ references:
     build:
       matrix:
         parameters:
-          ruby_version: ["2.6", "2.7", "3.0"]
+          ruby_version: ["2.6", "2.7", "3.0", "3.2", "3.3"]
 workflows:
   version: 2
   commit:
